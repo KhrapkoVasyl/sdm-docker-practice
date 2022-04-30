@@ -1,4 +1,7 @@
-FROM golang:1.17.9-buster
+##
+## Build
+##
+FROM golang:1.17.9-buster AS build
 
 WORKDIR /app
 
@@ -8,6 +11,19 @@ RUN go mod download & go mod verify
 
 COPY . .
 
-RUN go build -o ./build/fizzbuzz
+RUN CGO_ENABLED=0 go build -o ./build/fizzbuzz
 
-ENTRYPOINT [ "./build/fizzbuzz" ]
+
+
+##
+## Deploy
+##
+FROM scratch
+
+WORKDIR /app
+
+COPY --from=build /app/templates/index.html ./templates/index.html
+
+COPY --from=build /app/build/fizzbuzz ./fizzbuzz
+
+ENTRYPOINT [ "./fizzbuzz" ]
