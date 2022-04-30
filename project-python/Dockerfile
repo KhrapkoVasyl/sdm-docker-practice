@@ -1,6 +1,4 @@
-FROM python:3.10-alpine
-
-RUN apk add build-base
+FROM python:3.10-slim-bullseye
 
 WORKDIR /opt/myapp
 
