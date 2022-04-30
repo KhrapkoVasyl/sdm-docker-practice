@@ -18,7 +18,7 @@ RUN CGO_ENABLED=0 go build -o ./build/fizzbuzz
 ##
 ## Deploy
 ##
-FROM scratch
+FROM gcr.io/distroless/static
 
 WORKDIR /app
 
