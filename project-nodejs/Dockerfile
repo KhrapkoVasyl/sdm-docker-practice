@@ -1,6 +1,6 @@
 # stage 1
 
-FROM node:16.14.2-alpine3.14 AS build
+FROM node:16-alpine3.14 AS build
 
 WORKDIR /app
 
@@ -14,7 +14,11 @@ RUN npm run build
 
 # stage 2
 
-FROM node:16.14.2-alpine3.14
+FROM node:16-alpine3.14
+
+RUN apk add --no-cache tini
+
+ENTRYPOINT ["/sbin/tini", "--"]
 
 WORKDIR /app
 
@@ -23,3 +27,4 @@ COPY --from=build /app/dist /app/.env /app/package*.json ./
 RUN npm ci --production
 
 CMD ["node", "main.js"]
+  
